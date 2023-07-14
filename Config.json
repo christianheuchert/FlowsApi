@@ -1,0 +1,7 @@
+{
+    "Triggers": ["mqtt"],
+    "Functions": ["consoleLog", "restCall"],
+    "OuputTypes": ["Object", "String", "Number"],
+    "InputTypes": ["Object", "String", "Number"],
+    "FlowToBuild":"Simple Flow"
+}
