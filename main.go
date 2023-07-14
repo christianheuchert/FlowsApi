@@ -11,7 +11,7 @@ import (
 )
 
 // Globals Variables
-var storedFlows = api.ReadFlows() // Flows from flows.json
+var storedFlows = api.ReadFlows("flows.json") // Flows from flows.json
 
 func main() {
 	// API setup and Start

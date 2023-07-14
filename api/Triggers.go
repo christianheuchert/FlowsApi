@@ -43,7 +43,7 @@ var connectLostHandler mqtt.ConnectionLostHandler = func(client mqtt.Client, err
 func MqttTrigger(flow Flow, outputChannel chan interface{}) {
 	mqttSettingsJson := flow.Trigger.Settings
 	var mqttSettings MqttSettings
-	errUnmarshal := json.Unmarshal([]byte(mqttSettingsJson), &mqttSettingsJson)
+	errUnmarshal := json.Unmarshal([]byte(mqttSettingsJson), &mqttSettings)
 	if errUnmarshal != nil {
 	  fmt.Println(errUnmarshal)
 	  return
@@ -52,6 +52,8 @@ func MqttTrigger(flow Flow, outputChannel chan interface{}) {
 	topic := mqttSettings.Topic
 	host := mqttSettings.Host
 	port, _ := strconv.Atoi(mqttSettings.Port)
+
+	fmt.Println(topic, host, port)
 
 	client := connect("mqttTrigger", host, port)
 	client.Subscribe(topic, 0, func(client mqtt.Client, msg mqtt.Message) {

@@ -8,12 +8,10 @@ import (
 )
 
 // Reads in Flows stored in flows.json
-func ReadFlows() []Flow{
-	// The file path
-	filepath := "flows.json"
+func ReadFlows(flowPath string) []Flow{
 
 	// Read the file
-	contents, err := ioutil.ReadFile(filepath)
+	contents, err := ioutil.ReadFile(flowPath)
 	if err != nil {
 	  fmt.Println(err)
 	  return nil

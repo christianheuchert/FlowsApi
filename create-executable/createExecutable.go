@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"path/filepath"
+	"runtime"
 
 	"airistaflows/api"
 )
@@ -14,41 +16,53 @@ import (
 var outputChannel = make(chan interface{}) // Output Channel for all Triggers
 
 func main(){
-	storedFlows := api.ReadFlows()
-	flowToBuildName := readSettings()
+	// get absolute path to json data
+	_, path, _, _ := runtime.Caller(0)
+	// step up two levels
+	path = filepath.Dir(path)
+	path = filepath.Dir(path)
+	// join absolute path and relative path
+	pathFlow:= (path + "\\flows.json")
+	pathConfig:= (path + "\\Config.json")
+
+	storedFlows := api.ReadFlows(pathFlow)
+	flowToBuildName := readSettings(pathConfig)
 	var flowToBuild api.Flow
 	for _, flow := range storedFlows{
 		if (flow.Name == flowToBuildName){
 			flowToBuild = flow
 		}
 	}
-	fmt.Println(flowToBuild.Name)
 
 	switch trigger := flowToBuild.Trigger.Type; trigger{
 	case "mqtt":
 		api.MqttTrigger(flowToBuild, outputChannel)
 	default:
-		fmt.Println("Set Trigger not found")
+		fmt.Println("Trigger Type not found")
 	}
 
-	// Channel listener to pass data to Functions
+	// Channel listener to pass trigger output to Functions
 	for{
 		triggerOuput := <- outputChannel
 
 		for _, function := range flowToBuild.Functions{
-			
+			switch functionName := function.Type; functionName{
+			case "consoleLog":
+				api.PrintFunction(triggerOuput)
+			case "restCall":
+				fmt.Println("restCall to come")
+			default:
+				fmt.Println("Function Type not found")
+			}
 		}
-
 	}
+
 }
 
 
-func readSettings() string{
-	// The file path
-	filepath := "./Config.json"
-
+func readSettings(configPath string) string{
 	// Read the file
-	contents, err := ioutil.ReadFile(filepath)
+	contents, err := ioutil.ReadFile(configPath)
 	if err != nil {
 	  fmt.Println(err)
 	  return ""
