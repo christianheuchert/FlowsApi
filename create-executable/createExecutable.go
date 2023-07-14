@@ -4,12 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"time"
 
 	"airistaflows/api"
 )
 
 // This file is to generate the executable with passed Flow settings
+
+//Global Output Channel
+var outputChannel = make(chan interface{}) // Output Channel for all Triggers
 
 func main(){
 	storedFlows := api.ReadFlows()
@@ -22,9 +24,22 @@ func main(){
 	}
 	fmt.Println(flowToBuild.Name)
 
+	switch trigger := flowToBuild.Trigger.Type; trigger{
+	case "mqtt":
+		api.MqttTrigger(flowToBuild, outputChannel)
+	default:
+		fmt.Println("Set Trigger not found")
+	}
+
+	// Channel listener to pass data to Functions
 	for{
-		time.Sleep(10 * time.Second)
-	}// Loop forever
+		triggerOuput := <- outputChannel
+
+		for _, function := range flowToBuild.Functions{
+			
+		}
+
+	}
 }
 
 

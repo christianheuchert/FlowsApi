@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"strconv"
@@ -39,18 +40,22 @@ var connectLostHandler mqtt.ConnectionLostHandler = func(client mqtt.Client, err
 	// fmt.Printf("Connect lost: %v", err)
 }
 
-func listen(host string, port int, topic string, outputChannel chan string) {
-	client := connect("mqttTrigger", host, port)
-	client.Subscribe(topic, 0, func(client mqtt.Client, msg mqtt.Message) {
-		fmt.Printf("* [%s] %s\n", msg.Topic(), string(msg.Payload()))
-		outputChannel <- string(msg.Payload())
-	})
-}
+func MqttTrigger(flow Flow, outputChannel chan interface{}) {
+	mqttSettingsJson := flow.Trigger.Settings
+	var mqttSettings MqttSettings
+	errUnmarshal := json.Unmarshal([]byte(mqttSettingsJson), &mqttSettingsJson)
+	if errUnmarshal != nil {
+	  fmt.Println(errUnmarshal)
+	  return
+	}
 
-func MqttTrigger(mqttSettings MqttSettings, outputChannel chan string){
 	topic := mqttSettings.Topic
 	host := mqttSettings.Host
 	port, _ := strconv.Atoi(mqttSettings.Port)
 
-	go listen(host, port, topic, outputChannel)
+	client := connect("mqttTrigger", host, port)
+	client.Subscribe(topic, 0, func(client mqtt.Client, msg mqtt.Message) {
+		//fmt.Printf("* [%s] %s\n", msg.Topic(), string(msg.Payload()))
+		outputChannel <- string(msg.Payload())
+	})
 }

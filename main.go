@@ -12,7 +12,6 @@ import (
 
 // Globals Variables
 var storedFlows = api.ReadFlows() // Flows from flows.json
-var outputChannel = make(chan string) // Output Channel for all Triggers
 
 func main() {
 	// API setup and Start
@@ -35,18 +34,7 @@ func main() {
 	}
 }
 
-func testingFunction(){// Unmarshal the JSON data into an object
-	// testData := storedFlows[1].Trigger.Settings
-	// var mqttSettings api.MqttSettings
-	// errUnmarshal := json.Unmarshal([]byte(testData), &mqttSettings)
-	// if errUnmarshal != nil {
-	//   fmt.Println(errUnmarshal)
-	//   return
-	// }
-	// api.MqttTrigger(mqttSettings, outputChannel)
-	// for{
-	// 	time.Sleep(10 * time.Second)
-	// }// Loop forever
+func testingFunction(){
 	api.CreateExecutable(storedFlows[1])
 }
 
