@@ -28,6 +28,27 @@ func ReadFlows(flowPath string) []Flow{
 	return flowArray
 }
 
+// Reads in Config Settings stored in Config.json
+func ReadConfig(configPath string) Config{
+
+	// Read the file
+	contents, err := ioutil.ReadFile(configPath)
+	if err != nil {
+	  fmt.Println(err)
+	  return Config{}
+	}
+
+	// Unmarshal the JSON data into an object
+	var config Config
+	errUnmarshal := json.Unmarshal([]byte(contents), &config)
+	if errUnmarshal != nil {
+	  fmt.Println(errUnmarshal)
+	  return Config{}
+	}
+
+	return config
+}
+
 // make executable
 func CreateExecutable(flow Flow) {
 	//path to the Golang program
@@ -43,4 +64,40 @@ func CreateExecutable(flow Flow) {
         panic(err)
     }
 
+}
+
+//Update Config.json FlowToBuild
+func UpdateConfig(newFlowToBuild string) {
+	configPath := "Config.json"
+    contents, err := ioutil.ReadFile(configPath)
+	if err != nil {
+	  fmt.Println(err)
+	  return
+	}
+
+	// Unmarshal the JSON data into an object
+	var config Config
+	errUnmarshal := json.Unmarshal([]byte(contents), &config)
+	if errUnmarshal != nil {
+	  fmt.Println(errUnmarshal)
+	  return
+	}
+	//Update FLow to Build
+	config.FlowToBuild = newFlowToBuild
+
+    // Serialize the `Config` object to JSON.
+    jsonData, err := json.MarshalIndent(config, "", "    ")
+    if err != nil {
+        fmt.Println(err.Error())
+        return
+    }
+
+    // Write the JSON data to the `Config.json` file.
+    err = ioutil.WriteFile("Config.json", jsonData, 0644)
+    if err != nil {
+        fmt.Println(err.Error())
+        return
+    }
+
+    fmt.Println("Config updated successfully!")
 }

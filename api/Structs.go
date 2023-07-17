@@ -53,7 +53,6 @@ type Variables struct {
 	Value string `json:"Value"`
 }
 type MqttSettings struct {
-	Name     string `json:"Name"`
 	Protocol string `json:"Protocol"`
 	Host     string `json:"Host"`
 	Port     string `json:"Port"`

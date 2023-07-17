@@ -4,15 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"strconv"
 	"time"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
 // mqtt trigger ------------------------------------------------------- MQTT
-func connect(clientId string, host string, port int) mqtt.Client {
-	opts := createClientOptions(clientId, host, port)
+func connect(clientId string, settings MqttSettings) mqtt.Client {
+	opts := createClientOptions(clientId, settings)
 	client := mqtt.NewClient(opts)
 	token := client.Connect()
 	for !token.WaitTimeout(3 * time.Second) {
@@ -22,13 +21,12 @@ func connect(clientId string, host string, port int) mqtt.Client {
 	}
 	return client
 }
-func createClientOptions(clientId string, host string, port int) *mqtt.ClientOptions {
+func createClientOptions(clientId string,settings MqttSettings) *mqtt.ClientOptions {
 	opts := mqtt.NewClientOptions()
-	protocol := "ws"
-	opts.AddBroker(fmt.Sprintf("%s://%s:%d", protocol, host, port))
+	opts.AddBroker(fmt.Sprintf("%s://%s:%s", settings.Protocol, settings.Host, settings.Port))
 	opts.SetClientID(clientId)
-	opts.SetUsername("!@3%4*N]ZY@KfqSJ")
-	opts.SetPassword("9w#v;7Ma?*:5]W!U")
+	opts.SetUsername(settings.Username)
+	opts.SetPassword(settings.Password)
 	opts.OnConnect = connectHandler
 	opts.OnConnectionLost = connectLostHandler
 	return opts
@@ -49,14 +47,8 @@ func MqttTrigger(flow Flow, outputChannel chan interface{}) {
 	  return
 	}
 
-	topic := mqttSettings.Topic
-	host := mqttSettings.Host
-	port, _ := strconv.Atoi(mqttSettings.Port)
-
-	fmt.Println(topic, host, port)
-
-	client := connect("mqttTrigger", host, port)
-	client.Subscribe(topic, 0, func(client mqtt.Client, msg mqtt.Message) {
+	client := connect("mqttTrigger", mqttSettings)
+	client.Subscribe(mqttSettings.Topic, 0, func(client mqtt.Client, msg mqtt.Message) {
 		//fmt.Printf("* [%s] %s\n", msg.Topic(), string(msg.Payload()))
 		outputChannel <- string(msg.Payload())
 	})

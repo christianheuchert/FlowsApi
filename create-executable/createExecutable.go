@@ -15,6 +15,7 @@ import (
 //Global Output Channel
 var outputChannel = make(chan interface{}) // Output Channel for all Triggers
 
+// Main function gets turned into an executable. 
 func main(){
 	// get absolute path to json data
 	_, path, _, _ := runtime.Caller(0)

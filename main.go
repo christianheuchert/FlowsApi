@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"path/filepath"
+	"runtime"
 
 	"airistaflows/api"
 
@@ -12,10 +14,11 @@ import (
 
 // Globals Variables
 var storedFlows = api.ReadFlows("flows.json") // Flows from flows.json
+var storedConfig = api.ReadConfig("Config.json") // Flows from flows.json
 
 func main() {
 	// API setup and Start
-	if (false){ // API On/Off switch
+	if (true){ // API On/Off switch
 		router := gin.Default()
 		router.Use(cors.New(cors.Config{
 			AllowOrigins: []string{"http://localhost:4200"},
@@ -23,6 +26,7 @@ func main() {
 			AllowHeaders: []string{"Content-Type", "Authorization"},
 		}))
 		router.GET("/flows", getFlows) // return all flows
+        router.GET("/config", getConfig) // return config
 		router.POST("/flows", postFlow) // create flow
 		router.GET("/flows/:name", getFlowByName) // return specific flow
 		router.GET("/flowExec/:name", createFlowExec) // create executable for specific flow
@@ -41,6 +45,11 @@ func testingFunction(){
 // getFlows responds with the list of all Flows as JSON.
 func getFlows(c *gin.Context) {
     c.IndentedJSON(http.StatusOK, storedFlows)
+}
+
+// getConfig responds with the Config as JSON.
+func getConfig(c *gin.Context) {
+    c.IndentedJSON(http.StatusOK, storedConfig)
 }
 
 // postFlow adds an flow from JSON received in the request body.
@@ -78,12 +87,20 @@ func getFlowByName(c *gin.Context) {
 func createFlowExec(c *gin.Context) {
     name := c.Param("name")
 
+    // Update Config.json FlowToBuild to passed name
+    api.UpdateConfig(name)
+
+    // get absolute path to json data
+	_, path, _, _ := runtime.Caller(0)
+	// step up two levels
+	path = filepath.Dir(path)
+
     // Loop over the list of flows, looking for
     // a flow whose name matches the parameter.
     for _, flow := range storedFlows {
         if flow.Name == name {
 			api.CreateExecutable(flow)
-            c.IndentedJSON(http.StatusOK, flow)
+            c.IndentedJSON(http.StatusOK, path)
             return
         }
     }

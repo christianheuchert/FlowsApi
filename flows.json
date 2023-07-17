@@ -8,8 +8,7 @@
     "Input": "Object",
     "Output": "Object",
     "Settings": {
-      "Name": "Airstia Broker 177",
-      "Protocol": "ws://",
+      "Protocol": "ws",
       "Host": "52.45.17.177",
       "Port": "9001",
       "Topic": "AoA-Position",
@@ -62,10 +61,9 @@
     "Input": "Object",
     "Output": "Object",
     "Settings": {
-      "Name": "Airstia Broker 177",
-      "Protocol": "ws://",
       "Host": "52.45.17.177",
       "Port": "9001",
+      "Protocol": "ws",
       "Topic": "AoA-Position",
       "Username": "!@3%4*N]ZY@KfqSJ",
       "Password": "9w#v;7Ma?*:5]W!U"
