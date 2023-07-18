@@ -10,7 +10,8 @@
     "InputTypes": [
         "Object",
         "String",
-        "Number"
+        "Number",
+        "None"
     ],
-    "FlowToBuild": "Flow 1"
+    "FlowToBuild": "2"
 }

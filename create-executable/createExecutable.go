@@ -27,10 +27,10 @@ func main(){
 	pathConfig:= (path + "\\Config.json")
 
 	storedFlows := api.ReadFlows(pathFlow)
-	flowToBuildName := readSettings(pathConfig)
+	flowToBuildId := readSettings(pathConfig)
 	var flowToBuild api.Flow
-	for _, flow := range storedFlows{
-		if (flow.Name == flowToBuildName){
+	for _, flow := range storedFlows{ // select flow to build by FlowToBuild Id
+		if (flow.Id == flowToBuildId){
 			flowToBuild = flow
 		}
 	}
@@ -39,7 +39,7 @@ func main(){
 	case "mqtt":
 		api.MqttTrigger(flowToBuild, outputChannel)
 	default:
-		fmt.Println("Trigger Type not found")
+		fmt.Println("Trigger Type not found", trigger)
 	}
 
 	// Channel listener to pass trigger output to Functions

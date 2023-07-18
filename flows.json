@@ -1,4 +1,5 @@
 [{
+  "Id": "1",
   "Name": "Flow 1",
   "Description": "Test Flow for Development",
   "Trigger": {
@@ -6,6 +7,7 @@
     "Description": "Test trigger for Development",
     "Type": "mqtt",
     "Input": "Object",
+    "InputDetails": "",
     "Output": "Object",
     "Settings": {
       "Protocol": "ws",
@@ -29,7 +31,7 @@
       "Description": "Basic Get Api call",
       "Type": "restCall",
       "Input": "mqtt test1",
-      "Output": "string",
+      "Output": "String",
       "Settings": {
         "Varaibles": [{
           "Name": "MacAddress",
@@ -52,6 +54,7 @@
   ]
 },
 {
+  "Id": "2",
   "Name": "Simple Flow",
   "Description": "Simple Flow for Development",
   "Trigger": {

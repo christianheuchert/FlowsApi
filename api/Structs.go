@@ -6,6 +6,7 @@ import (
 
 // Flow Structs
 type Flow struct {
+	Id 			string 		`json:"Id"`
 	Name        string      `json:"Name"`
 	Description string      `json:"Description"`
 	Trigger     Trigger     `json:"Trigger"`

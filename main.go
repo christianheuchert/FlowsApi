@@ -27,9 +27,10 @@ func main() {
 		}))
 		router.GET("/flows", getFlows) // return all flows
         router.GET("/config", getConfig) // return config
-		router.POST("/flows", postFlow) // create flow
-		router.GET("/flows/:name", getFlowByName) // return specific flow
-		router.GET("/flowExec/:name", createFlowExec) // create executable for specific flow
+        router.POST("/updateFlow", updateFlow) // update flow
+		//router.POST("/flows", postFlow) // create flow
+		//router.GET("/flows/:name", getFlowByName) // return specific flow
+		router.GET("/flowExec/:id", createFlowExec) // create executable for specific flow
 
 		router.Run("localhost:8080")
 	}else{
@@ -67,6 +68,19 @@ func postFlow(c *gin.Context) {
     c.IndentedJSON(http.StatusCreated, newFlow)
 }
 
+// updateFlows updates flow from JSON received in the request body.
+func updateFlow(c *gin.Context) {
+    var newFlow api.Flow
+
+    // Call BindJSON to bind the received JSON to
+    // newFlow.
+    if err := c.BindJSON(&newFlow); err != nil {
+        return
+    }
+
+    c.IndentedJSON(http.StatusCreated, newFlow)
+}
+
 // getFlowByName locates the Flow whose ID value matches the name
 // parameter sent by the client, then returns that Flow as a response.
 func getFlowByName(c *gin.Context) {
@@ -85,10 +99,13 @@ func getFlowByName(c *gin.Context) {
 
 // creates an executable for requested Flow
 func createFlowExec(c *gin.Context) {
-    name := c.Param("name")
+    id := c.Param("id")
 
-    // Update Config.json FlowToBuild to passed name
-    api.UpdateConfig(name)
+    // Update Config.json FlowToBuild to passed id
+    api.UpdateConfig(id)
+
+    // update stored config
+	storedConfig = api.ReadConfig("Config.json") 
 
     // get absolute path to json data
 	_, path, _, _ := runtime.Caller(0)
@@ -96,9 +113,9 @@ func createFlowExec(c *gin.Context) {
 	path = filepath.Dir(path)
 
     // Loop over the list of flows, looking for
-    // a flow whose name matches the parameter.
+    // a flow whose id matches the parameter.
     for _, flow := range storedFlows {
-        if flow.Name == name {
+        if flow.Id == id {
 			api.CreateExecutable(flow)
             c.IndentedJSON(http.StatusOK, path)
             return
