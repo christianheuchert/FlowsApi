@@ -9,10 +9,11 @@ type Flow struct {
 	Id 			string 		`json:"Id"`
 	Name        string      `json:"Name"`
 	Description string      `json:"Description"`
-	Trigger     Trigger     `json:"Trigger"`
-	Functions   []Functions `json:"Functions"`
+	Triggers    []Trigger   `json:"Triggers"`
+	Functions   []Function  `json:"Functions"`
 }
 type Trigger struct {
+	Id 			string 		  `json:"Id"`
 	Name         string       `json:"Name"`
 	Description  string       `json:"Description"`
 	Type         string       `json:"Type"`
@@ -20,7 +21,8 @@ type Trigger struct {
 	Output       string       `json:"Output"`
 	Settings 	 json.RawMessage	  `json:"Settings"`
 }
-type Functions struct {
+type Function struct {
+	Id 				 string 		  `json:"Id"`
 	Name             string           `json:"Name"`
 	Description      string           `json:"Description"`
 	Type             string           `json:"Type"`

@@ -39,7 +39,7 @@ var connectLostHandler mqtt.ConnectionLostHandler = func(client mqtt.Client, err
 }
 
 func MqttTrigger(flow Flow, outputChannel chan interface{}) {
-	mqttSettingsJson := flow.Trigger.Settings
+	mqttSettingsJson := flow.Triggers[0].Settings
 	var mqttSettings MqttSettings
 	errUnmarshal := json.Unmarshal([]byte(mqttSettingsJson), &mqttSettings)
 	if errUnmarshal != nil {

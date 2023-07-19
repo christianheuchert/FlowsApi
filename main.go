@@ -35,7 +35,7 @@ func main() {
 		router.Run("localhost:8080")
 	}else{
 		fmt.Println("Testing Function")
-		testingFunction()
+		fmt.Println(storedFlows[0].Triggers)
 	}
 }
 

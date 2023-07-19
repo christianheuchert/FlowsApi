@@ -35,7 +35,7 @@ func main(){
 		}
 	}
 
-	switch trigger := flowToBuild.Trigger.Type; trigger{
+	switch trigger := flowToBuild.Triggers[0].Type; trigger{
 	case "mqtt":
 		api.MqttTrigger(flowToBuild, outputChannel)
 	default:
