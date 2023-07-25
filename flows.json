@@ -1,10 +1,26 @@
 [{
   "Id": "1",
   "Name": "Flow 1",
-  "Description": "Test Flow for Development",
+  "Description": "Two Triggers, Two Branches",
   "Triggers": [
     {
       "Id": "3",
+      "Name": "mqtt test1",
+      "Description": "Test trigger for Development",
+      "Type": "mqtt",
+      "Input": "Object",
+      "Output": "Object",
+      "Settings": {
+        "Protocol": "ws",
+        "Host": "52.45.17.177",
+        "Port": "9001",
+        "Topic": "AoA-Position",
+        "Username": "!@3%4*N]ZY@KfqSJ",
+        "Password": "9w#v;7Ma?*:5]W!U"
+      }
+    },
+    {
+      "Id": "8",
       "Name": "mqtt test1",
       "Description": "Test trigger for Development",
       "Type": "mqtt",
@@ -26,34 +42,24 @@
       "Name": "Print mqtt data",
       "Description": "Prints to Terminal output",
       "Type": "consoleLog",
-      "Input": "mqtt test1",
+      "Input": "3",
       "Output": "None"
     },
     {
       "Id": "5",
-      "Name": "Make Http request test 1",
-      "Description": "Basic Get Api call",
-      "Type": "restCall",
-      "Input": "mqtt test1",
-      "Output": "String",
-      "Settings": {
-        "Varaibles": [{
-          "Name": "MacAddress",
-          "Input": "mqtt test1",
-          "Value": "obj.MAC"
-        },
-        {
-          "Name": "CustomerId",
-          "Input": "Value",
-          "Value": "1"
-        }
-        ],
-        "Method": "Get",
-        "URL": "http://52.45.17.177:802/XpertRestApi/api/Device/GetByMacAddress?",
-        "Authorization": "Basic",
-        "Username": "afadmin",
-        "Password": "admin"
-      }
+      "Name": "Print data again",
+      "Description": "Prints to Terminal output",
+      "Type": "consoleLog",
+      "Input": "3",
+      "Output": "None"
+    },
+    {
+      "Id": "9",
+      "Name": "Print data again",
+      "Description": "Prints to Terminal output",
+      "Type": "consoleLog",
+      "Input": "8",
+      "Output": "None"
     }
   ]
 },
@@ -85,7 +91,7 @@
       "Name": "Print mqtt data",
       "Description": "Prints to Terminal output",
       "Type": "consoleLog",
-      "Input": "mqtt test1",
+      "Input": "2",
       "Output": ""
     }
   ]

@@ -1,0 +1,26 @@
+{
+    "Id": "5",
+    "Name": "Make Http request test 1",
+    "Description": "Basic Get Api call",
+    "Type": "restCall",
+    "Input": "mqtt test1",
+    "Output": "String",
+    "Settings": {
+      "Varaibles": [{
+        "Name": "MacAddress",
+        "Input": "mqtt test1",
+        "Value": "obj.MAC"
+      },
+      {
+        "Name": "CustomerId",
+        "Input": "Value",
+        "Value": "1"
+      }
+      ],
+      "Method": "Get",
+      "URL": "http://52.45.17.177:802/XpertRestApi/api/Device/GetByMacAddress?",
+      "Authorization": "Basic",
+      "Username": "afadmin",
+      "Password": "admin"
+    }
+  }
