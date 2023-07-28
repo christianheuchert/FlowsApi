@@ -18,7 +18,7 @@ var storedConfig = api.ReadConfig("Config.json") // Flows from flows.json
 
 func main() {
 	// API setup and Start
-	if (true){ // API On/Off switch
+	if (false){ // API On/Off switch
 		router := gin.Default()
 		router.Use(cors.New(cors.Config{
 			AllowOrigins: []string{"http://localhost:4200"},
@@ -35,7 +35,8 @@ func main() {
 		router.Run("localhost:8080")
 	}else{
 		fmt.Println("Testing Function")
-		//fmt.Println(storedFlows[0].Triggers)
+        // 
+        api.RestCallGetGroups("52.45.17.177:802", 1, "afadmin", "admin")
 	}
 }
 
