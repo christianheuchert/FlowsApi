@@ -27,22 +27,23 @@ func main() {
 		}))
 		router.GET("/flows", getFlows) // return all flows
         router.GET("/config", getConfig) // return config
-        router.POST("/updateFlow", updateFlow) // update flow
-		//router.POST("/flows", postFlow) // create flow
+        // router.POST("/updateFlow", updateFlow) // update flow
+		router.POST("/createFlow/:id", createFlow) // create flow
 		//router.GET("/flows/:name", getFlowByName) // return specific flow
 		router.GET("/flowExec/:id", createFlowExec) // create executable for specific flow
 
 		router.Run("localhost:8080")
 	}else{
-		fmt.Println("Testing Function")
-        // 
-        api.RestCallGetGroups("52.45.17.177:802", 1, "afadmin", "admin")
-	}
+		fmt.Println("Testing Block")
+        // fmt.Println(api.RestCallGetGroups("52.45.17.177:802", "1", "afadmin", "admin"))
+
+        var config api.Config
+        config.FlowToBuild = "2"
+        config.CurrentId = "9"
+        api.UpdateConfig(config)
+    }
 }
 
-func testingFunction(){
-	api.CreateExecutable(storedFlows[1])
-}
 
 // getFlows responds with the list of all Flows as JSON.
 func getFlows(c *gin.Context) {
@@ -55,18 +56,32 @@ func getConfig(c *gin.Context) {
 }
 
 // postFlow adds an flow from JSON received in the request body.
-func postFlow(c *gin.Context) {
-    var newFlow api.Flow
+func createFlow(c *gin.Context) {
+    id := c.Param("id")
 
-    // Call BindJSON to bind the received JSON to
-    // newFlow.
-    if err := c.BindJSON(&newFlow); err != nil {
-        return
+    // Update Config.json FlowToBuild to passed id
+    var config api.Config
+    config.FlowToBuild = id
+    api.UpdateConfig(config)
+
+    // update stored config
+	storedConfig = api.ReadConfig("Config.json") 
+
+    // get absolute path to json data
+	_, path, _, _ := runtime.Caller(0)
+	// step out a level
+	path = filepath.Dir(path)
+
+    // Loop over the list of flows, looking for
+    // a flow whose id matches the parameter.
+    for _, flow := range storedFlows {
+        if flow.Id == id {
+			api.CreateExecutable(flow)
+            c.IndentedJSON(http.StatusOK, path)
+            return
+        }
     }
-
-    // Add the new Flow to the slice.
-    storedFlows = append(storedFlows, newFlow)
-    c.IndentedJSON(http.StatusCreated, newFlow)
+    c.IndentedJSON(http.StatusNotFound, gin.H{"message": "flow not found"})
 }
 
 // updateFlows updates flow from JSON received in the request body.
@@ -103,14 +118,15 @@ func createFlowExec(c *gin.Context) {
     id := c.Param("id")
 
     // Update Config.json FlowToBuild to passed id
-    api.UpdateConfig(id)
-
+    var config api.Config
+    config.FlowToBuild = id
+    api.UpdateConfig(config)
     // update stored config
 	storedConfig = api.ReadConfig("Config.json") 
 
     // get absolute path to json data
 	_, path, _, _ := runtime.Caller(0)
-	// step up two levels
+	// step out a level
 	path = filepath.Dir(path)
 
     // Loop over the list of flows, looking for

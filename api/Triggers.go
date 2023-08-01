@@ -53,3 +53,19 @@ func MqttTrigger(flow Flow, outputChannel chan interface{}) {
 		outputChannel <- string(msg.Payload())
 	})
 }
+
+// Timer trigger ------------------------------------------------------- Timer
+
+func Ticker(timer int){
+	ticker := time.NewTicker(1 * time.Second) // Create a new ticker with a 1-second interval
+	done := make(chan bool)
+    for {
+        select {
+		case <-done:
+			return
+        case <-ticker.C:
+            // The code inside this block will be executed every 1 second
+            fmt.Println("Ticker function is running at:", time.Now().Format("2006-01-02 15:04:05"))
+        }
+    }
+}

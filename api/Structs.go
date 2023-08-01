@@ -9,6 +9,7 @@ type Flow struct {
 	Id 			string 		`json:"Id"`
 	Name        string      `json:"Name"`
 	Description string      `json:"Description"`
+	Variables   []Variable
 	Triggers    []Trigger   `json:"Triggers"`
 	Functions   []Function  `json:"Functions"`
 }
@@ -38,22 +39,23 @@ type Config struct {
 	OutputTypes []string `json:"OutputTypes"`
 	InputTypes  []string `json:"InputTypes"`
 	FlowToBuild string   `json:"FlowToBuild"`
+	CurrentId   string   `json:"CurrentId"`
 }
 
 
 // Unique Settings Structs
 type RestCallSettings struct {
-	Variables     []Variables `json:"Variables"`
+	Variables     []Variable `json:"Variables"`
 	Method        string      `json:"Method"`
 	URL           string      `json:"URL"`
 	Authorization string      `json:"Authorization"`
 	Username      string      `json:"Username"`
 	Password      string      `json:"Password"`
 }
-type Variables struct {
+type Variable struct {
 	Name  string `json:"Name"`
-	Input string `json:"Input"`
-	Value string `json:"Value"`
+	Type string `json:"Type"`
+	Value interface{} `json:"Value"`
 }
 type MqttSettings struct {
 	Protocol string `json:"Protocol"`

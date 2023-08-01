@@ -1,4 +1,5 @@
-{
+[
+  {
     "Id": "5",
     "Name": "Make Http request test 1",
     "Description": "Basic Get Api call",
@@ -8,12 +9,12 @@
     "Settings": {
       "Varaibles": [{
         "Name": "MacAddress",
-        "Input": "mqtt test1",
+        "Type": "string",
         "Value": "obj.MAC"
       },
       {
         "Name": "CustomerId",
-        "Input": "Value",
+        "Input": "string",
         "Value": "1"
       }
       ],
@@ -23,4 +24,8 @@
       "Username": "afadmin",
       "Password": "admin"
     }
+  },
+  {
+
   }
+]

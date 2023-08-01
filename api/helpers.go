@@ -67,23 +67,28 @@ func CreateExecutable(flow Flow) {
 }
 
 //Update Config.json FlowToBuild
-func UpdateConfig(newFlowToBuild string) {
+func UpdateConfig(newConfig Config) {
+	// Read in File
 	configPath := "Config.json"
     contents, err := ioutil.ReadFile(configPath)
 	if err != nil {
 	  fmt.Println(err)
 	  return
 	}
-
-	// Unmarshal the JSON data into an object
+	// Unmarshal the config JSON into an object
 	var config Config
 	errUnmarshal := json.Unmarshal([]byte(contents), &config)
 	if errUnmarshal != nil {
 	  fmt.Println(errUnmarshal)
 	  return
 	}
-	//Update FLow to Build
-	config.FlowToBuild = newFlowToBuild
+	// update config field if value
+	if(newConfig.CurrentId != ""){
+		config.CurrentId = newConfig.CurrentId
+	}
+	if(newConfig.FlowToBuild != ""){
+		config.FlowToBuild = newConfig.FlowToBuild
+	}
 
     // Serialize the `Config` object to JSON.
     jsonData, err := json.MarshalIndent(config, "", "    ")
@@ -99,5 +104,5 @@ func UpdateConfig(newFlowToBuild string) {
         return
     }
 
-    fmt.Println("Config updated successfully!")
+    // fmt.Println("Config updated successfully!")
 }
