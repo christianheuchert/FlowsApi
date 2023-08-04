@@ -35,12 +35,14 @@ func main() {
 		router.Run("localhost:8080")
 	}else{
 		fmt.Println("Testing Block")
-        // fmt.Println(api.RestCallGetGroups("52.45.17.177:802", "1", "afadmin", "admin"))
+        var Department api.Department
+        Department.ID = 3098
+        fmt.Println(api.RestCallGetAllByDepartment("52.45.17.177:802", "1", "afadmin", "admin", Department))
 
-        var config api.Config
-        config.FlowToBuild = "2"
-        config.CurrentId = "9"
-        api.UpdateConfig(config)
+        // var config api.Config
+        // config.FlowToBuild = "2"
+        // config.CurrentId = "9"
+        // api.UpdateConfig(config)
     }
 }
 

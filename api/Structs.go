@@ -65,3 +65,34 @@ type MqttSettings struct {
 	Username string `json:"Username"`
 	Password string `json:"Password"`
 }
+
+// Airista Department Struct
+
+type Department struct {
+	CustomerID               int    `json:"CustomerId"`
+	DateCreated              string `json:"DateCreated"`
+	DateUpdated              string `json:"DateUpdated"`
+	Description              string `json:"Description"`
+	EnableTenancy            bool   `json:"EnableTenancy"`
+	Name                     string `json:"Name"`
+	TenantID                 string `json:"TenantId"`
+	ElapsedTimeInMillseconds float64    `json:"ElapsedTimeInMillseconds"`
+	ErrorMessage             string `json:"ErrorMessage"`
+	SuccessMessage           string `json:"SuccessMessage"`
+	HasError                 bool   `json:"HasError"`
+	ID                       int    `json:"Id"`
+}
+
+type RestCallGetDepartmentsResponse struct {
+	List 					 []Department `json:"List"`
+	ElapsedTimeInMillseconds float64 `json:"ElapsedTimeInMillseconds"`
+	EndDateTime              string     `json:"EndDateTime"`
+	ErrorMessage             string  `json:"ErrorMessage"`
+	IsDescending             bool    `json:"IsDescending"`
+	NumberOfRecordsPerPage   int     `json:"NumberOfRecordsPerPage"`
+	PageNumber               int     `json:"PageNumber"`
+	SearchText               string  `json:"SearchText"`
+	SortColumn               string  `json:"SortColumn"`
+	StartDateTime            string     `json:"StartDateTime"`
+	TotalRecordsCount        int     `json:"TotalRecordsCount"`
+}
